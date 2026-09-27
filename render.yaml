@@ -22,5 +22,5 @@ databases:
   - name: auditdraft-db
     databaseName: auditdraft
     user: auditdraft
-    plan: 0.1c-256mb
+    plan: free
     region: oregon
