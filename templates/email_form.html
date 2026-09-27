@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}Draft Email{% endblock %}
+{% block content %}
+<h3 class="mb-3">Draft an Email</h3>
+<div class="card p-4">
+  <form method="POST">
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label class="form-label">Email Type</label>
+        <select class="form-select" name="email_type">
+          {% for key, tmpl in email_types.items() %}
+          <option value="{{ key }}">{{ tmpl.label }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-md-6 mb-3">
+        <label class="form-label">Client</label>
+        <select class="form-select" name="client_id" required>
+          {% for c in clients %}<option value="{{ c.id }}">{{ c.name }}</option>{% endfor %}
+        </select>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label class="form-label">Link to Existing Query (optional)</label>
+        <select class="form-select" name="query_id">
+          <option value="">-- None --</option>
+          {% for qd in queries %}
+          <option value="{{ qd.id }}" {% if request.args.get('query_id')|string == qd.id|string %}selected{% endif %}>
+            {{ qd.query_ref }} — {{ qd.audit_area }}
+          </option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-md-6 mb-3">
+        <label class="form-label">Recipient Name</label>
+        <input class="form-control" name="recipient_name" placeholder="e.g. Mr. Sharma">
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Custom Text (used if no query linked)</label>
+      <textarea class="form-control" name="custom_text" rows="3"></textarea>
+    </div>
+
+    <button class="btn btn-primary" type="submit">Generate Email</button>
+  </form>
+</div>
+{% endblock %}

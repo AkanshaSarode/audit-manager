@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Register - AuditDraft Assistant{% endblock %}
+{% block content %}
+<div class="card login-card p-4">
+  <h3 class="mb-3 text-center">Create Account</h3>
+  <form method="POST">
+    <div class="mb-3">
+      <label class="form-label">Full Name</label>
+      <input class="form-control" name="name" required>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Username</label>
+      <input class="form-control" name="username" required>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Email</label>
+      <input class="form-control" type="email" name="email">
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Password</label>
+      <input class="form-control" type="password" name="password" required>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Designation</label>
+      <input class="form-control" name="designation" placeholder="e.g. Audit Executive">
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Firm Name</label>
+      <input class="form-control" name="firm_name" placeholder="e.g. ABC & Associates, Chartered Accountants">
+    </div>
+    <button class="btn btn-primary w-100" type="submit">Register</button>
+  </form>
+  <p class="text-center mt-3"><a href="{{ url_for('login') }}">Back to login</a></p>
+</div>
+{% endblock %}

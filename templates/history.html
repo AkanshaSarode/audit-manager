@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Audit Trail{% endblock %}
+{% block content %}
+<h3 class="mb-3">Document History & Audit Trail</h3>
+
+<form class="row mb-3" method="GET">
+  <div class="col-md-4"><input class="form-control" name="q" value="{{ q }}" placeholder="Search details / engagement code..."></div>
+  <div class="col-md-3">
+    <select class="form-select" name="doc_type">
+      <option value="">All Types</option>
+      <option value="query" {% if doc_type=='query' %}selected{% endif %}>Query</option>
+      <option value="email" {% if doc_type=='email' %}selected{% endif %}>Email</option>
+      <option value="invoice" {% if doc_type=='invoice' %}selected{% endif %}>Invoice</option>
+      <option value="template" {% if doc_type=='template' %}selected{% endif %}>Template</option>
+    </select>
+  </div>
+  <div class="col-md-2"><button class="btn btn-primary w-100">Filter</button></div>
+</form>
+
+<div class="card p-3">
+  <table class="table table-sm">
+    <thead><tr><th>Timestamp</th><th>Type</th><th>Doc ID</th><th>Action</th><th>Engagement</th><th>Details</th></tr></thead>
+    <tbody>
+    {% for log in logs %}
+      <tr>
+        <td>{{ log.timestamp.strftime('%d-%b-%Y %H:%M') }}</td>
+        <td>{{ log.doc_type }}</td>
+        <td>{{ log.doc_id }}</td>
+        <td>{{ log.action }}</td>
+        <td>{{ log.engagement_code or '-' }}</td>
+        <td>{{ log.details }}</td>
+      </tr>
+    {% else %}
+      <tr><td colspan="6" class="text-muted">No history found.</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Query History{% endblock %}
+{% block content %}
+<h3 class="mb-3">Query History</h3>
+<form class="row mb-3" method="GET">
+  <div class="col-md-6">
+    <input class="form-control" name="q" value="{{ q }}" placeholder="Search by ref or keyword...">
+  </div>
+  <div class="col-md-2"><button class="btn btn-primary w-100">Search</button></div>
+</form>
+<div class="card p-3">
+  <table class="table table-sm">
+    <thead><tr><th>Ref</th><th>Client</th><th>Area</th><th>Status</th><th>Date</th><th></th></tr></thead>
+    <tbody>
+    {% for doc in docs %}
+      <tr>
+        <td>{{ doc.query_ref }}</td>
+        <td>{{ doc.engagement.client.name }}</td>
+        <td>{{ doc.audit_area }}</td>
+        <td>{{ doc.status }}</td>
+        <td>{{ doc.created_at.strftime('%d-%b-%Y') }}</td>
+        <td><a href="{{ url_for('query_view', query_id=doc.id) }}">View</a></td>
+      </tr>
+    {% else %}
+      <tr><td colspan="6" class="text-muted">No queries found.</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}Query {{ q.query_ref }}{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h3>Query {{ q.query_ref }}</h3>
+  <div>
+    <a class="btn btn-outline-secondary" href="{{ url_for('export_query', query_id=q.id, fmt='docx') }}">Export .docx</a>
+    <a class="btn btn-outline-secondary" href="{{ url_for('export_query', query_id=q.id, fmt='pdf') }}">Export .pdf</a>
+    <a class="btn btn-success" href="{{ url_for('email_new') }}?query_id={{ q.id }}">Convert to Email</a>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-8">
+    <div class="card p-3">
+      <form method="POST" action="{{ url_for('query_edit', query_id=q.id) }}">
+        <textarea class="form-control doc-preview" name="generated_text" rows="18">{{ q.generated_text }}</textarea>
+        <button class="btn btn-primary mt-3" type="submit">Save Edits</button>
+      </form>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card p-3">
+      <h6>Details</h6>
+      <table class="table table-sm">
+        <tr><th>Engagement</th><td>{{ q.engagement.engagement_code }}</td></tr>
+        <tr><th>Client</th><td>{{ q.engagement.client.name }}</td></tr>
+        <tr><th>Area</th><td>{{ q.audit_area }}</td></tr>
+        <tr><th>Tone</th><td>{{ q.tone }}</td></tr>
+        <tr><th>Urgency</th><td>{{ q.urgency }}</td></tr>
+        <tr><th>Status</th><td>{{ q.status }}</td></tr>
+        <tr><th>Created</th><td>{{ q.created_at.strftime('%d-%b-%Y %H:%M') }}</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}

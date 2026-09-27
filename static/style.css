@@ -1,0 +1,13 @@
+body { background-color: #f5f7fa; }
+.app-navbar { background-color: #1f2d3d; }
+.card { border: none; box-shadow: 0 1px 4px rgba(0,0,0,0.08); border-radius: 10px; }
+pre.doc-preview {
+  background: #fff;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  padding: 1.25rem;
+  white-space: pre-wrap;
+  font-family: "Georgia", serif;
+  font-size: 0.95rem;
+}
+.login-card { max-width: 420px; margin: 4rem auto; }

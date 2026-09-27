@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Email Preview{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h3>Email Preview</h3>
+  <div>
+    <a class="btn btn-outline-secondary" href="{{ url_for('export_email', email_id=e.id, fmt='docx') }}">Export .docx</a>
+    <a class="btn btn-outline-secondary" href="{{ url_for('export_email', email_id=e.id, fmt='pdf') }}">Export .pdf</a>
+    <a class="btn btn-success" href="{{ url_for('email_mark_sent', email_id=e.id) }}">Mark as Sent</a>
+  </div>
+</div>
+
+<div class="card p-3">
+  <form method="POST" action="{{ url_for('email_edit', email_id=e.id) }}">
+    <div class="mb-3">
+      <label class="form-label">Subject</label>
+      <input class="form-control" name="subject" value="{{ e.subject }}">
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Body</label>
+      <textarea class="form-control doc-preview" name="body" rows="16">{{ e.body }}</textarea>
+    </div>
+    <button class="btn btn-primary" type="submit">Save Edits</button>
+    <span class="badge bg-secondary ms-2">Status: {{ e.status }}</span>
+  </form>
+</div>
+
+<div class="alert alert-info mt-3">
+  Tip: Use <strong>Export .docx/.pdf</strong>, or select all text in the body box and copy it directly
+  into Outlook/Gmail (FR-29 — copy as plain text).
+</div>
+{% endblock %}

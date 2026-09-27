@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Clients{% endblock %}
+{% block content %}
+<div class="row">
+  <div class="col-md-5">
+    <div class="card p-3 mb-3">
+      <h5>Add Client</h5>
+      <form method="POST">
+        <div class="mb-2"><label class="form-label">Name</label><input class="form-control" name="name" required></div>
+        <div class="mb-2"><label class="form-label">GSTIN</label><input class="form-control" name="gstin"></div>
+        <div class="mb-2"><label class="form-label">PAN</label><input class="form-control" name="pan"></div>
+        <div class="mb-2"><label class="form-label">Address</label><textarea class="form-control" name="address"></textarea></div>
+        <div class="mb-2"><label class="form-label">Contact Person</label><input class="form-control" name="contact_person"></div>
+        <div class="mb-2"><label class="form-label">Contact Email</label><input class="form-control" type="email" name="contact_email"></div>
+        <button class="btn btn-primary w-100 mt-2">Add Client</button>
+      </form>
+    </div>
+  </div>
+  <div class="col-md-7">
+    <div class="card p-3">
+      <h5>Client Master</h5>
+      <table class="table table-sm">
+        <thead><tr><th>Name</th><th>GSTIN</th><th>Contact</th></tr></thead>
+        <tbody>
+        {% for c in clients %}
+          <tr><td>{{ c.name }}</td><td>{{ c.gstin or '-' }}</td><td>{{ c.contact_person or '-' }}</td></tr>
+        {% else %}
+          <tr><td colspan="3" class="text-muted">No clients yet.</td></tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}

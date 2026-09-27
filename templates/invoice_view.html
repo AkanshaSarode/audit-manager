@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}Invoice {{ inv.invoice_number }}{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h3>Invoice {{ inv.invoice_number }}</h3>
+  <div>
+    <a class="btn btn-outline-secondary" href="{{ url_for('export_invoice', invoice_id=inv.id, fmt='docx') }}">Export .docx</a>
+    <a class="btn btn-outline-secondary" href="{{ url_for('export_invoice', invoice_id=inv.id, fmt='pdf') }}">Export .pdf</a>
+  </div>
+</div>
+
+<div class="card p-4">
+  <h5>{{ current_user.firm_name }}</h5>
+  <p class="text-muted">{{ 'TAX INVOICE' if inv.invoice_type == 'invoice' else inv.invoice_type.replace('_',' ').title() }}</p>
+
+  <div class="row mb-3">
+    <div class="col-md-6">
+      <strong>Bill To:</strong><br>
+      {{ client.name }}<br>
+      GSTIN: {{ client.gstin or '-' }} | PAN: {{ client.pan or '-' }}<br>
+      {{ client.address or '' }}
+    </div>
+    <div class="col-md-6 text-md-end">
+      <div>Invoice No: {{ inv.invoice_number }}</div>
+      <div>Date: {{ inv.created_at.strftime('%d-%b-%Y') }}</div>
+      {% if inv.reference_invoice %}<div>Ref: {{ inv.reference_invoice }}</div>{% endif %}
+      <div>Place of Supply: {{ inv.place_of_supply or '-' }}</div>
+    </div>
+  </div>
+
+  <table class="table">
+    <thead><tr><th>Description</th><th>HSN/SAC</th><th class="text-end">Amount ({{ inv.currency }})</th></tr></thead>
+    <tbody>
+      <tr><td>{{ inv.service_description }}</td><td>{{ inv.hsn_sac }}</td><td class="text-end">{{ '%.2f'|format(inv.fee_amount) }}</td></tr>
+      {% if inv.reimbursement %}
+      <tr><td>Reimbursement of Expenses</td><td>-</td><td class="text-end">{{ '%.2f'|format(inv.reimbursement) }}</td></tr>
+      {% endif %}
+      <tr><td colspan="2" class="text-end">Taxable Value</td><td class="text-end">{{ '%.2f'|format(inv.taxable_value) }}</td></tr>
+      <tr><td colspan="2" class="text-end">GST @ {{ inv.gst_rate }}%</td><td class="text-end">{{ '%.2f'|format(inv.tax_amount) }}</td></tr>
+      <tr class="fw-bold"><td colspan="2" class="text-end">Total</td><td class="text-end">{{ inv.currency }} {{ '%.2f'|format(inv.total_amount) }}</td></tr>
+    </tbody>
+  </table>
+
+  {% if inv.tds_applicable %}
+  <p class="text-muted">Note: TDS @ {{ inv.tds_rate }}% is deductible by the client at source.</p>
+  {% endif %}
+
+  <p><strong>Amount in Words:</strong> {{ inv.amount_in_words }}</p>
+</div>
+{% endblock %}

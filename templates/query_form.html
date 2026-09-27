@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}New Query{% endblock %}
+{% block content %}
+<h3 class="mb-3">Frame a New Audit Query</h3>
+<div class="card p-4">
+  {% if not engagements %}
+    <div class="alert alert-warning">Please <a href="{{ url_for('engagements') }}">create an engagement</a> first.</div>
+  {% endif %}
+  <form method="POST">
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label class="form-label">Engagement</label>
+        <select class="form-select" name="engagement_id" required>
+          {% for e in engagements %}
+          <option value="{{ e.id }}">{{ e.engagement_code }} — {{ e.client.name }} ({{ e.engagement_type }})</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-md-6 mb-3">
+        <label class="form-label">Audit Area</label>
+        <select class="form-select" name="audit_area">
+          <option>Revenue</option>
+          <option>Inventory</option>
+          <option>Related Party Transactions</option>
+          <option>Expenses</option>
+          <option>Fixed Assets</option>
+          <option>Statutory Dues / Compliance</option>
+          <option>Cash & Bank</option>
+          <option>Other</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Observation / Issue Description</label>
+      <textarea class="form-control" name="description" rows="4" required
+        placeholder="e.g. Expense of Rs 2,40,000 booked under Repairs & Maintenance - supporting invoice not available."></textarea>
+    </div>
+
+    <div class="row">
+      <div class="col-md-4 mb-3">
+        <label class="form-label">Tone</label>
+        <select class="form-select" name="tone">
+          <option value="formal">Formal</option>
+          <option value="very_formal">Very Formal</option>
+        </select>
+      </div>
+      <div class="col-md-4 mb-3">
+        <label class="form-label">Urgency</label>
+        <select class="form-select" name="urgency">
+          <option value="normal">Normal</option>
+          <option value="high">High</option>
+          <option value="critical">Critical</option>
+        </select>
+      </div>
+      <div class="col-md-4 mb-3">
+        <label class="form-label">Response Deadline (days)</label>
+        <input class="form-control" type="number" name="deadline_days" value="3" min="1">
+      </div>
+    </div>
+
+    <button class="btn btn-primary" type="submit" {% if not engagements %}disabled{% endif %}>Generate Query</button>
+  </form>
+</div>
+{% endblock %}

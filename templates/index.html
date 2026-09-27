@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-4">
+  <div>
+    <h3 class="mb-1">AuditDraft Dashboard</h3>
+    <p class="text-muted mb-0">Quick overview of your audit drafting workspace.</p>
+  </div>
+</div>
+
+<div class="row g-3 mb-4">
+  <div class="col-md-3">
+    <div class="card p-3 text-center">
+      <div class="text-muted">Clients</div>
+      <div class="fs-2 fw-bold">{{ stats.clients }}</div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card p-3 text-center">
+      <div class="text-muted">Queries Raised</div>
+      <div class="fs-2 fw-bold">{{ stats.queries }}</div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card p-3 text-center">
+      <div class="text-muted">Emails Drafted</div>
+      <div class="fs-2 fw-bold">{{ stats.emails }}</div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card p-3 text-center">
+      <div class="text-muted">Invoices Generated</div>
+      <div class="fs-2 fw-bold">{{ stats.invoices }}</div>
+    </div>
+  </div>
+</div>
+
+<div class="row g-3 mb-4">
+  <div class="col-md-4">
+    <a href="{{ url_for('query_new') }}" class="text-decoration-none">
+      <div class="card p-4 h-100"><h5>📝 Frame a Query</h5><p class="text-muted mb-0">Generate a professional audit query.</p></div>
+    </a>
+  </div>
+  <div class="col-md-4">
+    <a href="{{ url_for('email_new') }}" class="text-decoration-none">
+      <div class="card p-4 h-100"><h5>✉️ Draft an Email</h5><p class="text-muted mb-0">Create queries, reminders, MRLs, NOCs, and more.</p></div>
+    </a>
+  </div>
+  <div class="col-md-4">
+    <a href="{{ url_for('invoice_new') }}" class="text-decoration-none">
+      <div class="card p-4 h-100"><h5>🧾 Generate an Invoice</h5><p class="text-muted mb-0">Prepare fee invoices and credit or debit notes.</p></div>
+    </a>
+  </div>
+</div>
+
+<div class="card p-3">
+  <h5>Recent Activity</h5>
+  <div class="table-responsive">
+    <table class="table table-sm mt-2 mb-0">
+      <thead><tr><th>Time</th><th>Type</th><th>Action</th><th>Details</th></tr></thead>
+      <tbody>
+        {% for log in recent %}
+        <tr>
+          <td>{{ log.timestamp.strftime('%d-%b-%Y %H:%M') }}</td>
+          <td>{{ log.doc_type }}</td>
+          <td>{{ log.action }}</td>
+          <td>{{ log.details }}</td>
+        </tr>
+        {% else %}
+        <tr><td colspan="4" class="text-muted">No activity yet.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

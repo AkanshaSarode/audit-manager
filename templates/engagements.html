@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}Engagements{% endblock %}
+{% block content %}
+<div class="row">
+  <div class="col-md-5">
+    <div class="card p-3 mb-3">
+      <h5>New Engagement</h5>
+      <form method="POST">
+        <div class="mb-2">
+          <label class="form-label">Client</label>
+          <select class="form-select" name="client_id" required>
+            {% for c in clients %}<option value="{{ c.id }}">{{ c.name }}</option>{% endfor %}
+          </select>
+        </div>
+        <div class="mb-2">
+          <label class="form-label">Engagement Type</label>
+          <select class="form-select" name="engagement_type">
+            <option value="statutory">Statutory Audit</option>
+            <option value="internal">Internal Audit</option>
+            <option value="tax">Tax Audit</option>
+            <option value="gst">GST Audit</option>
+          </select>
+        </div>
+        <div class="mb-2"><label class="form-label">Period (e.g. FY 2025-26)</label><input class="form-control" name="period"></div>
+        <div class="mb-2"><label class="form-label">Engagement Code</label><input class="form-control" name="engagement_code" placeholder="e.g. CLT01-SA-2526" required></div>
+        <div class="mb-2"><label class="form-label">Assigned Team</label><input class="form-control" name="assigned_team"></div>
+        <button class="btn btn-primary w-100 mt-2">Create Engagement</button>
+      </form>
+    </div>
+  </div>
+  <div class="col-md-7">
+    <div class="card p-3">
+      <h5>Engagements</h5>
+      <table class="table table-sm">
+        <thead><tr><th>Code</th><th>Client</th><th>Type</th><th>Period</th></tr></thead>
+        <tbody>
+        {% for e in engagements %}
+          <tr><td>{{ e.engagement_code }}</td><td>{{ e.client.name }}</td><td>{{ e.engagement_type }}</td><td>{{ e.period }}</td></tr>
+        {% else %}
+          <tr><td colspan="4" class="text-muted">No engagements yet.</td></tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}

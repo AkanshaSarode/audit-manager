@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block title %}Template Library{% endblock %}
+{% block content %}
+<h3 class="mb-3">Template & Clause Library</h3>
+
+{% if current_user.role in ['admin', 'manager'] %}
+<div class="card p-3 mb-3">
+  <h5>Add Template</h5>
+  <form method="POST">
+    <div class="row">
+      <div class="col-md-4 mb-2"><input class="form-control" name="name" placeholder="Template Name" required></div>
+      <div class="col-md-4 mb-2">
+        <select class="form-select" name="category">
+          <option value="query">Query</option>
+          <option value="email">Email</option>
+          <option value="letter">Letter</option>
+          <option value="checklist">Checklist</option>
+        </select>
+      </div>
+      <div class="col-md-4 mb-2">
+        <select class="form-select" name="engagement_type">
+          <option value="statutory">Statutory</option>
+          <option value="internal">Internal</option>
+          <option value="tax">Tax</option>
+          <option value="gst">GST</option>
+          <option value="general">General</option>
+        </select>
+      </div>
+    </div>
+    <textarea class="form-control mb-2" name="content" rows="4" placeholder="Template content with {placeholders}" required></textarea>
+    <button class="btn btn-primary">Add Template</button>
+  </form>
+</div>
+{% endif %}
+
+<form class="row mb-3" method="GET">
+  <div class="col-md-6"><input class="form-control" name="q" value="{{ q }}" placeholder="Search templates..."></div>
+  <div class="col-md-2"><button class="btn btn-primary w-100">Search</button></div>
+</form>
+
+{% for t in templates %}
+<div class="card p-3 mb-2">
+  <div class="d-flex justify-content-between">
+    <div>
+      <h6>{{ t.name }} <span class="badge bg-secondary">{{ t.category }}</span> <span class="badge bg-light text-dark">v{{ t.version }}</span></h6>
+      <small class="text-muted">{{ t.engagement_type }} • updated {{ t.updated_at.strftime('%d-%b-%Y') }}</small>
+    </div>
+    {% if current_user.role in ['admin', 'manager'] %}
+    <a class="btn btn-sm btn-outline-danger" href="{{ url_for('template_delete', template_id=t.id) }}"
+       onclick="return confirm('Delete this template?')">Delete</a>
+    {% endif %}
+  </div>
+  <details class="mt-2">
+    <summary>View / Edit content</summary>
+    <form method="POST" action="{{ url_for('template_edit', template_id=t.id) }}" class="mt-2">
+      <textarea class="form-control" name="content" rows="4" {% if current_user.role not in ['admin','manager'] %}readonly{% endif %}>{{ t.content }}</textarea>
+      {% if current_user.role in ['admin', 'manager'] %}
+      <button class="btn btn-sm btn-primary mt-2">Save New Version</button>
+      {% endif %}
+    </form>
+  </details>
+</div>
+{% else %}
+<p class="text-muted">No templates yet.</p>
+{% endfor %}
+{% endblock %}
